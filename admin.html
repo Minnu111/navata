@@ -756,6 +756,44 @@ function initApp(){
   populateHubSel();
   initCharts();
 }
+  <script>
+  // firebase config...
+</script>
+
+👉 IKKADA PASTE CHEYYI 👇
+
+<script>
+const db = firebase.firestore();
+
+function loadVehicles() {
+  db.collection("vehicles").get().then((snapshot) => {
+    const tbody = document.getElementById("vt-body");
+    tbody.innerHTML = "";
+
+    snapshot.forEach((doc) => {
+      const d = doc.data();
+
+      const row = `
+        <tr>
+          <td>${d.vehicleNo || ''}</td>
+          <td>${d.chassisNo || ''}</td>
+          <td>${d.engineNo || ''}</td>
+          <td>${d.year || ''}</td>
+          <td>${d.maker || ''}</td>
+          <td>${d.hub || ''}</td>
+          <td>${d.type || ''}</td>
+          <td>${d.category || ''}</td>
+          <td>${d.age || ''}</td>
+          <td>${d.states || ''}</td>
+        </tr>
+      `;
+
+      tbody.innerHTML += row;
+    });
+  });
+}
+
+window.onload = loadVehicles;
 </script>
 </body>
 </html>
