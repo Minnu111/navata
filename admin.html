@@ -8,6 +8,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 <style>
 :root{
   --bg:#07091a;
@@ -738,7 +739,7 @@ function populateHubSel(){
   const hubs=[...new Set(data.map(d=>d.HUB).filter(Boolean))].sort();
   hubs.forEach(h=>{const o=document.createElement('option');o.value=h;o.textContent=h;sel.appendChild(o);});
 }
-
+const db = firebase.firestore();
 function initApp(){
   const cats=cnt(data,'CATEGORY');
   document.getElementById('nb-total').textContent=data.length;
