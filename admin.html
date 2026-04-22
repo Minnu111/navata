@@ -1136,11 +1136,9 @@ function populateHubSel(){
 
 // ══════════════ WHATSAPP ALERT SYSTEM ══════════════
 const WA_NUMBER = '919010394042';
-const DOC_TYPES = ['RC','INS','PUC','FC','PERMIT'];
+// DOC_TYPES defined below in Document Management System
 
-function getDocStore(){
-  try{const s=localStorage.getItem('navata_docs');return s?JSON.parse(s):{};}catch(e){return {};}
-}
+function getDocStore(){ return docStore; }
 
 function getDaysUntilExpiry(dateStr){
   if(!dateStr) return null;
