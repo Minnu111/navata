@@ -223,6 +223,45 @@ tbody td:first-child{font-family:'JetBrains Mono',monospace;font-size:12px;font-
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:rgba(201,168,76,0.15);border-radius:3px}
 
+/* ── CRUD MODAL ── */
+.modal-overlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn 0.2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-box{width:100%;max-width:680px;max-height:90vh;overflow-y:auto;background:linear-gradient(145deg,#0d1628,#0a1020);border:1px solid rgba(255,255,255,0.12);border-radius:24px;box-shadow:0 32px 80px rgba(0,0,0,0.7),inset 0 1px 0 rgba(255,255,255,0.07);animation:slideUp 0.3s ease}
+@keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-box::-webkit-scrollbar{width:4px}
+.modal-box::-webkit-scrollbar-thumb{background:rgba(201,168,76,0.2);border-radius:2px}
+.modal-header{padding:24px 28px 18px;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:linear-gradient(145deg,#0d1628,#0a1020);z-index:1}
+.modal-header::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.5),rgba(255,255,255,0.2),rgba(74,158,255,0.4),transparent)}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;background:linear-gradient(135deg,var(--gold2),#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:1px}
+.modal-close{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:var(--muted);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.modal-close:hover{background:rgba(248,113,113,0.15);border-color:rgba(248,113,113,0.3);color:#fca5a5}
+.modal-body{padding:24px 28px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-field{display:flex;flex-direction:column;gap:6px}
+.form-field.full{grid-column:1/-1}
+.f-label{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;font-weight:600}
+.f-input{padding:11px 14px;border-radius:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:all 0.2s}
+.f-input:focus{border-color:rgba(201,168,76,0.5);box-shadow:0 0 0 3px rgba(201,168,76,0.07);background:rgba(255,255,255,0.07)}
+.f-input option{background:#0d1628}
+.modal-footer{padding:18px 28px 24px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid rgba(255,255,255,0.06)}
+.btn-cancel{padding:10px 22px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all 0.2s}
+.btn-cancel:hover{background:rgba(255,255,255,0.07);color:var(--text)}
+.btn-primary{padding:10px 24px;border-radius:10px;border:none;background:linear-gradient(135deg,rgba(201,168,76,0.8),rgba(240,208,128,0.7));color:#0a0f1e;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 16px rgba(201,168,76,0.2)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(201,168,76,0.3)}
+.action-btns{display:flex;gap:6px;align-items:center}
+.btn-edit{padding:4px 12px;border-radius:6px;border:1px solid rgba(74,158,255,0.25);background:rgba(74,158,255,0.08);color:#7ab8ff;font-size:11px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif}
+.btn-edit:hover{background:rgba(74,158,255,0.18);border-color:rgba(74,158,255,0.45)}
+.btn-delete{padding:4px 10px;border-radius:6px;border:1px solid rgba(248,113,113,0.2);background:rgba(248,113,113,0.07);color:#fca5a5;font-size:11px;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif}
+.btn-delete:hover{background:rgba(248,113,113,0.18);border-color:rgba(248,113,113,0.4)}
+.btn-add{padding:9px 18px;border-radius:10px;border:1px solid rgba(74,222,128,0.3);background:rgba(74,222,128,0.1);color:#4ade80;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px}
+.btn-add:hover{background:rgba(74,222,128,0.18);border-color:rgba(74,222,128,0.5)}
+.confirm-box{width:100%;max-width:420px;background:linear-gradient(145deg,#0d1628,#0a1020);border:1px solid rgba(248,113,113,0.2);border-radius:20px;padding:32px;box-shadow:0 24px 60px rgba(0,0,0,0.6);animation:slideUp 0.3s ease;text-align:center}
+.confirm-box h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#fca5a5;margin-bottom:12px}
+.confirm-box p{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.6}
+.confirm-btns{display:flex;gap:10px;justify-content:center}
+.btn-del-confirm{padding:10px 22px;border-radius:10px;border:1px solid rgba(248,113,113,0.3);background:rgba(248,113,113,0.1);color:#fca5a5;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s}
+.btn-del-confirm:hover{background:rgba(248,113,113,0.2)}
+
 @media(max-width:1100px){.stat-grid{grid-template-columns:repeat(2,1fr)}.two-col,.three-col{grid-template-columns:1fr}.settings-grid{grid-template-columns:1fr}.hub-summary{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:768px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.stat-grid{grid-template-columns:1fr 1fr}}
 </style>
@@ -389,6 +428,7 @@ tbody td:first-child{font-family:'JetBrains Mono',monospace;font-size:12px;font-
             <input class="srch" id="v-search" placeholder="Search VEH NO, Engine, Hub…" oninput="renderVehicleTable()"/>
             <select class="sel" id="v-cat" onchange="renderVehicleTable()"><option value="">All Categories</option><option>TRUCKS</option><option>BIKES</option><option>CARS</option><option>TRUST</option><option>MOBILES</option></select>
             <select class="sel" id="v-hub" onchange="renderVehicleTable()"><option value="">All Hubs</option></select>
+            <button class="btn-add" onclick="openAddModal()">＋ Add Vehicle</button>
             <button class="btn-save" style="padding:8px 16px;font-size:12px" onclick="exportCSV()">⬇ Export CSV</button>
           </div>
         </div>
@@ -403,6 +443,7 @@ tbody td:first-child{font-family:'JetBrains Mono',monospace;font-size:12px;font-
           <th onclick="vSort(7)">Category <span class="si">↕</span></th>
           <th onclick="vSort(8)">Age <span class="si">↕</span></th>
           <th onclick="vSort(9)">States <span class="si">↕</span></th>
+          <th style="color:var(--muted);cursor:default">Actions</th>
         </tr></thead><tbody id="vt-body"></tbody></table></div>
         <div class="pgn"><span class="pgn-info" id="vt-info"></span><div class="pgn-btns" id="vt-btns"></div></div>
       </div>
@@ -476,7 +517,100 @@ tbody td:first-child{font-family:'JetBrains Mono',monospace;font-size:12px;font-
       </div>
     </div>
 
-  </div><!-- /main -->
+  
+<!-- ══ CRUD MODAL ══ -->
+<div id="crudModal" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title" id="modalTitle">Add Vehicle</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="f-label">Vehicle No *</label>
+          <input class="f-input" id="f-vno" placeholder="AP16TX2049"/>
+        </div>
+        <div class="form-field">
+          <label class="f-label">Chassis No</label>
+          <input class="f-input" id="f-chassis" placeholder="40KF7H005666"/>
+        </div>
+        <div class="form-field">
+          <label class="f-label">Engine No</label>
+          <input class="f-input" id="f-engine" placeholder="E683CD7H017483"/>
+        </div>
+        <div class="form-field">
+          <label class="f-label">Purchase Year</label>
+          <input class="f-input" id="f-year" type="number" placeholder="2010" min="1990" max="2030"/>
+        </div>
+        <div class="form-field">
+          <label class="f-label">Maker</label>
+          <input class="f-input" id="f-maker" placeholder="Tata / Eicher / Ashok Leyland"/>
+        </div>
+        <div class="form-field">
+          <label class="f-label">Hub</label>
+          <select class="f-input" id="f-hub">
+            <option value="">Select Hub</option>
+            <option>HYTR</option><option>VZTR</option><option>BLTR</option>
+            <option>CDTR</option><option>CHTR</option><option>VSTR</option>
+            <option>NGM</option><option>OTHER</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="f-label">Category</label>
+          <select class="f-input" id="f-cat">
+            <option value="">Select Category</option>
+            <option>TRUCKS</option><option>BIKES</option><option>CARS</option>
+            <option>TRUST</option><option>MOBILES</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="f-label">Vehicle Type</label>
+          <select class="f-input" id="f-type">
+            <option value="">Select Type</option>
+            <option>10-Tyre Truck</option><option>6-Tyre truck</option>
+            <option>2-Wlr</option><option>4-Wlr</option><option>VAN</option>
+            <option>TRACTOR</option><option>BUS</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="f-label">Age (Years)</label>
+          <input class="f-input" id="f-age" type="number" placeholder="15" min="0" max="50"/>
+        </div>
+        <div class="form-field">
+          <label class="f-label">Valid States</label>
+          <input class="f-input" id="f-states" placeholder="AP, TS"/>
+        </div>
+        <div class="form-field">
+          <label class="f-label">Reg Date</label>
+          <input class="f-input" id="f-reg" type="date"/>
+        </div>
+        <div class="form-field">
+          <label class="f-label">Model Year</label>
+          <input class="f-input" id="f-model" type="number" placeholder="2010"/>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveRecord()">💾 &nbsp;Save Vehicle</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONFIRM DELETE ══ -->
+<div id="confirmModal" class="modal-overlay" style="display:none">
+  <div class="confirm-box">
+    <h3>⚠ Delete Vehicle?</h3>
+    <p id="confirmMsg">This vehicle record will be permanently removed from the system.</p>
+    <div class="confirm-btns">
+      <button class="btn-cancel" onclick="closeConfirm()">Cancel</button>
+      <button class="btn-del-confirm" onclick="confirmDelete()">🗑 Delete</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
 </div><!-- /app -->
 
 <div id="toast"></div>
@@ -632,11 +766,12 @@ let vFiltered=[...data],vPage=1,vSortCol=-1,vSortAsc=true;
 const PER=25;
 
 function renderVehicleTable(customData,tbodyId,countId,infoId,btnsId,catOverride){
+  customData=customData||liveData;
   const tbody=document.getElementById(tbodyId||'vt-body');
   const q=(document.getElementById('v-search')||{value:''}).value.toLowerCase();
   const cat=catOverride||(document.getElementById('v-cat')||{value:''}).value;
   const hub=(document.getElementById('v-hub')||{value:''}).value;
-  const src=customData||data;
+  const src=customData;
   vFiltered=src.filter(d=>{
     const mq=!q||[d.VEH_NO,d.CHASSIS_NO,d.ENGINE_NO,d.HUB,d.MAKER].some(v=>String(v).toLowerCase().includes(q));
     return mq&&(!cat||d.CATEGORY===cat)&&(!hub||d.HUB===hub);
@@ -645,13 +780,15 @@ function renderVehicleTable(customData,tbodyId,countId,infoId,btnsId,catOverride
   if(vPage>total)vPage=1;
   const start=(vPage-1)*PER;
   const page=vFiltered.slice(start,start+PER);
-  if(tbody) tbody.innerHTML=page.map(d=>`<tr>
+  if(tbody) tbody.innerHTML=page.map((d,i)=>`<tr>
     <td>${d.VEH_NO||'-'}</td><td class="mono">${d.CHASSIS_NO||'-'}</td>
     <td class="mono">${d.ENGINE_NO||'-'}</td><td>${d.PURCHASE_YEAR||'-'}</td>
     <td>${d.MAKER||'-'}</td><td><strong style="color:var(--gold2)">${d.HUB||'-'}</strong></td>
     <td style="font-size:12px;color:var(--silver)">${d.VEH_TYPE||'-'}</td>
     <td>${catBadge(d.CATEGORY)}</td><td>${agePill(d.AGE)}</td>
-    <td style="font-size:12px;color:#67e8f9">${d.VALID_STATES||'-'}</td></tr>`).join('');
+    <td style="font-size:12px;color:#67e8f9">${d.VALID_STATES||'-'}</td>
+    <td><div class="action-btns"><button class="btn-edit" onclick="openEditModal(${start+i})">✏ Edit</button><button class="btn-delete" onclick="openDeleteConfirm(${start+i})">🗑</button></div></td>
+    </tr>`).join('');
   if(document.getElementById(countId||'vt-count')) document.getElementById(countId||'vt-count').textContent=vFiltered.length;
   if(document.getElementById(infoId||'vt-info')) document.getElementById(infoId||'vt-info').textContent=`Showing ${start+1}–${Math.min(start+PER,vFiltered.length)} of ${vFiltered.length}`;
   const pb=document.getElementById(btnsId||'vt-btns');
@@ -719,7 +856,7 @@ function catPage(uid,v,abs){if(abs)catPages[uid].page=v;else catPages[uid].page+
 
 function exportCSV(){
   const hdr=['VEH_NO','CHASSIS_NO','ENGINE_NO','PURCHASE_YEAR','MAKER','HUB','VEH_TYPE','CATEGORY','AGE','VALID_STATES'];
-  const rows=[hdr.join(','),...vFiltered.map(d=>hdr.map(k=>JSON.stringify(d[k]||'')).join(','))];
+  const rows=[hdr.join(','),...(vFiltered.length?vFiltered:liveData).map(d=>hdr.map(k=>JSON.stringify(d[k]||'')).join(','))];
   const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(rows.join('\n'));
   a.download='navata_vehicles.csv';a.click();showToast('✅ CSV Downloaded!');
 }
@@ -821,18 +958,135 @@ function populateHubSel(){
   hubs.forEach(h=>{const o=document.createElement('option');o.value=h;o.textContent=h;sel.appendChild(o);});
 }
 
-function initApp(){
-  const cats=cnt(data,'CATEGORY');
-  document.getElementById('nb-total').textContent=data.length;
+
+// ══ CRUD SYSTEM ══
+let liveData=[...data]; // mutable copy stored in memory
+let editIndex=null;
+let deleteIndex=null;
+
+// Sync liveData from localStorage if available
+(function(){
+  try{
+    const saved=localStorage.getItem('navata_veh_data');
+    if(saved){liveData=JSON.parse(saved);console.log('Loaded from storage:',liveData.length,'records');}
+  }catch(e){}
+})();
+
+function saveToStorage(){
+  try{localStorage.setItem('navata_veh_data',JSON.stringify(liveData));}catch(e){}
+}
+
+function openAddModal(){
+  editIndex=null;
+  document.getElementById('modalTitle').textContent='➕  Add New Vehicle';
+  ['vno','chassis','engine','year','maker','hub','cat','type','age','states','reg','model'].forEach(k=>document.getElementById('f-'+k).value='');
+  document.getElementById('crudModal').style.display='flex';
+}
+
+function openEditModal(idx){
+  editIndex=idx;
+  const d=vFiltered[idx];
+  document.getElementById('modalTitle').textContent='✏️  Edit Vehicle — '+d.VEH_NO;
+  document.getElementById('f-vno').value=d.VEH_NO||'';
+  document.getElementById('f-chassis').value=d.CHASSIS_NO||'';
+  document.getElementById('f-engine').value=d.ENGINE_NO||'';
+  document.getElementById('f-year').value=d.PURCHASE_YEAR||'';
+  document.getElementById('f-maker').value=d.MAKER||'';
+  document.getElementById('f-hub').value=d.HUB||'';
+  document.getElementById('f-cat').value=d.CATEGORY||'';
+  document.getElementById('f-type').value=d.VEH_TYPE||'';
+  document.getElementById('f-age').value=d.AGE||'';
+  document.getElementById('f-states').value=d.VALID_STATES||'';
+  document.getElementById('f-reg').value=d.REG_DATE||'';
+  document.getElementById('f-model').value=d.MODEL_YEAR||'';
+  document.getElementById('crudModal').style.display='flex';
+}
+
+function closeModal(){document.getElementById('crudModal').style.display='none';}
+
+function saveRecord(){
+  const vno=document.getElementById('f-vno').value.trim().toUpperCase();
+  if(!vno){showToast('⚠ Vehicle No is required!','#f87171');return;}
+  const rec={
+    VEH_NO:vno,
+    CHASSIS_NO:document.getElementById('f-chassis').value.trim().toUpperCase(),
+    ENGINE_NO:document.getElementById('f-engine').value.trim().toUpperCase(),
+    PURCHASE_YEAR:+document.getElementById('f-year').value||'',
+    MAKER:document.getElementById('f-maker').value.trim(),
+    HUB:document.getElementById('f-hub').value,
+    CATEGORY:document.getElementById('f-cat').value,
+    VEH_TYPE:document.getElementById('f-type').value,
+    AGE:+document.getElementById('f-age').value||'',
+    VALID_STATES:document.getElementById('f-states').value.trim().toUpperCase(),
+    REG_DATE:document.getElementById('f-reg').value,
+    MODEL_YEAR:+document.getElementById('f-model').value||'',
+    MODEL_NAME:''
+  };
+  if(editIndex!==null){
+    // Find actual index in liveData
+    const orig=vFiltered[editIndex];
+    const li=liveData.findIndex(d=>d.VEH_NO===orig.VEH_NO&&d.CHASSIS_NO===orig.CHASSIS_NO);
+    if(li>=0)liveData[li]=rec;
+    showToast('✅ Vehicle updated successfully!');
+  } else {
+    // Check duplicate
+    if(liveData.find(d=>d.VEH_NO===vno)){showToast('⚠ Vehicle No already exists!','#f87171');return;}
+    liveData.unshift(rec);
+    showToast('✅ New vehicle added!');
+  }
+  saveToStorage();
+  closeModal();
+  refreshAllCounts();
+  renderVehicleTable(liveData);
+}
+
+function openDeleteConfirm(idx){
+  deleteIndex=idx;
+  const d=vFiltered[idx];
+  document.getElementById('confirmMsg').textContent=`Vehicle "${d.VEH_NO}" will be permanently deleted.`;
+  document.getElementById('confirmModal').style.display='flex';
+}
+function closeConfirm(){document.getElementById('confirmModal').style.display='none';deleteIndex=null;}
+function confirmDelete(){
+  if(deleteIndex===null)return;
+  const orig=vFiltered[deleteIndex];
+  const li=liveData.findIndex(d=>d.VEH_NO===orig.VEH_NO&&d.CHASSIS_NO===orig.CHASSIS_NO);
+  if(li>=0)liveData.splice(li,1);
+  saveToStorage();
+  closeConfirm();
+  refreshAllCounts();
+  renderVehicleTable(liveData);
+  showToast('🗑 Vehicle deleted.','#fb923c');
+}
+
+function refreshAllCounts(){
+  const cats=cnt(liveData,'CATEGORY');
+  document.getElementById('nb-total').textContent=liveData.length;
   document.getElementById('nb-trucks').textContent=cats.TRUCKS||0;
   document.getElementById('nb-bikes').textContent=cats.BIKES||0;
   document.getElementById('nb-cars').textContent=cats.CARS||0;
   document.getElementById('nb-trust').textContent=cats.TRUST||0;
   document.getElementById('nb-mobiles').textContent=cats.MOBILES||0;
-  document.getElementById('d-total').textContent=data.length;
-  document.getElementById('d-hubs').textContent=new Set(data.map(d=>d.HUB).filter(Boolean)).size;
+  document.getElementById('d-total').textContent=liveData.length;
+  document.getElementById('d-hubs').textContent=new Set(liveData.map(d=>d.HUB).filter(Boolean)).size;
+  document.getElementById('d-old').textContent=liveData.filter(d=>+d.AGE>=20).length;
+}
+
+// Keyboard: ESC closes modal
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeConfirm();}});
+
+function initApp(){
+  const cats=cnt(data,'CATEGORY');
+  document.getElementById('nb-total').textContent=liveData.length;
+  document.getElementById('nb-trucks').textContent=cats.TRUCKS||0;
+  document.getElementById('nb-bikes').textContent=cats.BIKES||0;
+  document.getElementById('nb-cars').textContent=cats.CARS||0;
+  document.getElementById('nb-trust').textContent=cats.TRUST||0;
+  document.getElementById('nb-mobiles').textContent=cats.MOBILES||0;
+  document.getElementById('d-total').textContent=liveData.length;
+  document.getElementById('d-hubs').textContent=new Set(liveData.map(d=>d.HUB).filter(Boolean)).size;
   document.getElementById('d-makers').textContent=new Set(data.map(d=>d.MAKER).filter(Boolean)).size;
-  document.getElementById('d-old').textContent=data.filter(d=>+d.AGE>=20).length;
+  document.getElementById('d-old').textContent=liveData.filter(d=>+d.AGE>=20).length;
   document.getElementById('topDate').textContent=new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
   populateHubSel();
   initCharts();
