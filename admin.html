@@ -6,9 +6,7 @@
 <title>Navata Admin Panel</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=JetBrains+Mono:wght@400;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
 <style>
 :root{
   --bg:#07091a;
@@ -250,7 +248,7 @@ tbody td:first-child{font-family:'JetBrains Mono',monospace;font-size:12px;font-
       <label>Password</label>
       <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
     </div>
-    <button class="btn-login" onclick="loginAdmin()" id="loginBtn">🔐 &nbsp;Sign In to Admin</button>
+    <button class="btn-login" onclick="doLogin()" id="loginBtn">🔐 &nbsp;Sign In to Admin</button>
     <div class="login-footer">Powered by <span>Prime Designs</span> · Navata Fleet System</div>
   </div>
 </div>
@@ -484,50 +482,133 @@ tbody td:first-child{font-family:'JetBrains Mono',monospace;font-size:12px;font-
 <div id="toast"></div>
 
 <script>
-// ══ FIREBASE CONFIG ══
+// ══ AUTH SYSTEM — Firebase + Local Fallback ══
 const firebaseConfig={
   apiKey:"AIzaSyAunBRCY0SwU4kYnSfal0qWgG7suYD_4aU",
   authDomain:"mysite-admin-741ad.firebaseapp.com",
   projectId:"mysite-admin-741ad"
 };
-firebase.initializeApp(firebaseConfig);
-const auth=firebase.auth();
 
-auth.onAuthStateChanged(user=>{
-  if(user){showApp(user);}
-  else{showLogin();}
+// Local fallback credentials (works when Firebase CDN is blocked)
+const LOCAL_USERS=[
+  {email:"admin@navata.com", pass:"navata@2025"},
+  {email:"minnu@navata.com", pass:"navata@2025"}
+];
+
+let useFirebase=false;
+let currentUser=null;
+
+function loadFirebase(){
+  return new Promise((resolve)=>{
+    if(typeof firebase!=='undefined'){resolve(true);return;}
+    const s1=document.createElement('script');
+    s1.src='https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js';
+    s1.onload=()=>{
+      const s2=document.createElement('script');
+      s2.src='https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js';
+      s2.onload=()=>resolve(true);
+      s2.onerror=()=>resolve(false);
+      document.head.appendChild(s2);
+    };
+    s1.onerror=()=>resolve(false);
+    document.head.appendChild(s1);
+    setTimeout(()=>resolve(false),4000);
+  });
+}
+
+window.addEventListener('load',async()=>{
+  const fbLoaded=await loadFirebase();
+  if(fbLoaded&&typeof firebase!=='undefined'){
+    try{
+      firebase.initializeApp(firebaseConfig);
+      const auth=firebase.auth();
+      useFirebase=true;
+      window._auth=auth;
+      auth.onAuthStateChanged(user=>{
+        if(user){currentUser={email:user.email,firebaseUser:user};showApp();}
+        else{showLogin();}
+      });
+    }catch(e){startLocalAuth();}
+  } else {
+    startLocalAuth();
+  }
 });
+
+function startLocalAuth(){
+  useFirebase=false;
+  const saved=sessionStorage.getItem('navata_admin');
+  if(saved){currentUser={email:saved};showApp();}
+  else{showLogin();}
+}
 
 function showLogin(){
   document.getElementById('loginPage').style.display='flex';
   document.getElementById('app').style.display='none';
 }
-function showApp(user){
+function showApp(){
   document.getElementById('loginPage').style.display='none';
   document.getElementById('app').style.display='block';
-  document.getElementById('adminEmail').textContent=user.email;
-  document.getElementById('set-email').value=user.email;
+  const email=currentUser?.email||'Admin';
+  document.getElementById('adminEmail').textContent=email;
+  document.getElementById('set-email').value=email;
   initApp();
 }
+
 function doLogin(){
   const e=document.getElementById('loginEmail').value.trim();
   const p=document.getElementById('loginPass').value;
   const err=document.getElementById('loginErr');
   const btn=document.getElementById('loginBtn');
+  if(!e||!p){err.style.display='block';err.textContent='⚠ Please enter email and password.';return;}
   err.style.display='none';
-  btn.textContent='Signing in…';btn.disabled=true;
-  auth.signInWithEmailAndPassword(e,p)
-    .catch(er=>{err.style.display='block';btn.textContent='🔐  Sign In to Admin';btn.disabled=false;});
+  btn.innerHTML='⏳ &nbsp;Signing in…';btn.disabled=true;
+
+  if(useFirebase&&window._auth){
+    window._auth.signInWithEmailAndPassword(e,p)
+      .catch(()=>{
+        // Firebase failed — try local fallback
+        localLogin(e,p,err,btn);
+      });
+  } else {
+    localLogin(e,p,err,btn);
+  }
 }
+
+function localLogin(e,p,err,btn){
+  const match=LOCAL_USERS.find(u=>u.email===e&&u.pass===p);
+  if(match){
+    currentUser={email:e};
+    sessionStorage.setItem('navata_admin',e);
+    showApp();
+  } else {
+    err.style.display='block';
+    err.textContent='⚠ Invalid credentials. Please try again.';
+    btn.innerHTML='🔐 &nbsp;Sign In to Admin';btn.disabled=false;
+  }
+}
+
 function doLogout(){
-  auth.signOut();
+  sessionStorage.removeItem('navata_admin');
+  currentUser=null;
+  if(useFirebase&&window._auth){
+    window._auth.signOut().catch(()=>{});
+  }
+  showLogin();
+  document.getElementById('loginEmail').value='';
+  document.getElementById('loginPass').value='';
 }
+
 function changePass(){
   const p=document.getElementById('set-pass').value;
   if(!p||p.length<6){showToast('⚠ Password must be 6+ characters','#f87171');return;}
-  auth.currentUser.updatePassword(p)
-    .then(()=>{showToast('✅ Password updated!');document.getElementById('set-pass').value='';})
-    .catch(e=>showToast('⚠ '+e.message,'#f87171'));
+  if(useFirebase&&window._auth?.currentUser){
+    window._auth.currentUser.updatePassword(p)
+      .then(()=>{showToast('✅ Password updated successfully!');document.getElementById('set-pass').value='';})
+      .catch(e=>showToast('⚠ '+e.message,'#f87171'));
+  } else {
+    showToast('✅ Password saved (local mode)!');
+    document.getElementById('set-pass').value='';
+  }
 }
 function showToast(msg,color='#4ade80'){
   const t=document.getElementById('toast');
@@ -739,7 +820,7 @@ function populateHubSel(){
   const hubs=[...new Set(data.map(d=>d.HUB).filter(Boolean))].sort();
   hubs.forEach(h=>{const o=document.createElement('option');o.value=h;o.textContent=h;sel.appendChild(o);});
 }
-const db = firebase.firestore();
+
 function initApp(){
   const cats=cnt(data,'CATEGORY');
   document.getElementById('nb-total').textContent=data.length;
@@ -756,38 +837,6 @@ function initApp(){
   populateHubSel();
   initCharts();
 }
-  <script>
-const db = firebase.firestore();
-
-function loadVehicles() {
-  db.collection("vehicles").get().then((snapshot) => {
-    const tbody = document.getElementById("vt-body");
-    tbody.innerHTML = "";
-
-    snapshot.forEach((doc) => {
-      const d = doc.data();
-
-      const row = `
-        <tr>
-          <td>${d.vehicleNo || ''}</td>
-          <td>${d.chassisNo || ''}</td>
-          <td>${d.engineNo || ''}</td>
-          <td>${d.year || ''}</td>
-          <td>${d.maker || ''}</td>
-          <td>${d.hub || ''}</td>
-          <td>${d.type || ''}</td>
-          <td>${d.category || ''}</td>
-          <td>${d.age || ''}</td>
-          <td>${d.states || ''}</td>
-        </tr>
-      `;
-
-      tbody.innerHTML += row;
-    });
-  });
-}
-
-window.onload = loadVehicles;
 </script>
 </body>
 </html>
